@@ -2,9 +2,8 @@ const {userController} = require('../controller/index')
 const { verifyToken } = require('../middleware/auth')
 const router = require('express').Router()
 
-// router.post("/signup", userController.signup)
-// router.post("/login", userController.login)
-// router.get("/user",  verifyToken, userController.getUser)
+
+router.get("/users",   userController.getUsers)
 // router.put("/user", verifyToken, userController.editUser)
 // router.get('/users', verifyToken, userController.getAllUsers)
 

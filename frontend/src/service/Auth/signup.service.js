@@ -2,7 +2,7 @@ import axios from "axios"
 
  const signupService = async (inputs) => {
 
-        const response = await axios.post(process.env.REACT_APP_SERVER + '/signup', inputs)
+        const response = await axios.post('http://localhost:8080/auth/signup', inputs)
         return response
     
 }

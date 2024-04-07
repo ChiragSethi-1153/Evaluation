@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Box, Button, FormControl, InputAdornment, InputBase, InputLabel, MenuItem, OutlinedInput, Paper, Select, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, FormControl, IconButton, InputAdornment, InputBase, InputLabel, MenuItem, OutlinedInput, Paper, Select, Snackbar, Stack, TextField, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import validator from "validator";
 import { loginUsers } from '../../features/Auth/authAction';
+import CloseIcon from '@mui/icons-material/Close'
 import styles from './UserLogin.module.css'
 const UserLogin = () => {
 
@@ -11,13 +12,14 @@ const UserLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [open, setOpen] = useState(false);
+  const [valid, setValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [emailErrorMsg, setEmailErrorMsg] = useState("");
   const [navigation, setNavigation] = useState(false)
 
-    const token = useSelector((state) => state?.auth?.content?.token)
-    console.log(token)
+
   const validate = (value) => {
     if (
       validator.isStrongPassword(value, {
@@ -61,22 +63,45 @@ const UserLogin = () => {
   // const handleRole = (e) => {
   //   setInputs({ ...inputs, role: e.target.value })
   // }
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (navigation === false) {
-      alert('Enter Valid Credentials')
+      setValid(true)
+      
     }
-    else {
+    else if (inputs.email !== '' && inputs.password !== '') {
       console.log(inputs);
-      await dispatch(loginUsers(inputs));
-      await localStorage.setItem('token', token)
-    //   navigate("/home");
+      dispatch(loginUsers(inputs));
+      setOpen(true);
+      setTimeout(() => {
+        navigate("/home");
+
+      }, 2000)
+      
     }
   };
 
 
-
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
 
 
@@ -127,7 +152,6 @@ const UserLogin = () => {
             type={showPassword ? 'text' : 'password'}
             inputProps={{
                 style: {
-             
                   padding: "14px 16px 14px 16px",
                 },
               }}
@@ -182,22 +206,7 @@ const UserLogin = () => {
 
           <Button
             variant="contained"
-            style={{
-              textTransform: "capitalize",
-              width: "100%",
-              boxShadow: "none",
-              height: "min-content",
-              minHeight: "48px",
-              borderRadius: "28px",
-              padding: "10px 24px 10px 24px",
-              textAlign: "center",
-              fontSize: "16px",
-              fontWeight: 500,
-              marginTop: "20px",
-              fontFamily:
-                '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif',
-              backgroundColor: "#0a66c2",
-            }}
+            className={styles.loginBtn}
             type="submit"
             onClick={(e) => handleSubmit(e)}
           >
@@ -206,6 +215,18 @@ const UserLogin = () => {
         </Stack>
 
       </Paper>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        message="LoggedIn Successfully"
+      />
+      <Snackbar
+        open={valid}
+        autoHideDuration={3000}
+        onClose={(e) => handleClose(e)}
+        message="Enter Valid Credentials"
+        action={action}
+      />
     </Box>
   )
 }

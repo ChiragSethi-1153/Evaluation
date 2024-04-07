@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { registerUsers } from '../../features/Auth/authAction';
-import { Box, Button, FormControl, IconButton, InputAdornment, InputBase, InputLabel, MenuItem, OutlinedInput, Select, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, IconButton, InputAdornment, InputBase, InputLabel, MenuItem, OutlinedInput, Paper, Select, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import validator from "validator";
+import styles from './UserSignup.module.css'
 
 const UserSignup = () => {
 
@@ -16,7 +17,7 @@ const UserSignup = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
+  const [open, setOpen] = useState(false);
   const [inputs, setInputs] = useState({ name: '', email: '', password: '', role: '' })
   const [errorMessage, setErrorMessage] = useState("");
   const [emailErrorMsg, setEmailErrorMsg] = useState("");
@@ -68,16 +69,20 @@ const handleRole = (e) => {
    else{
     console.log(inputs)
     dispatch(registerUsers(inputs))
-    navigate('/login')
+    setOpen(true);
+      setTimeout(() => {
+        navigate("/login");
+
+      }, 2000)
    }
     
   }
 
   return (
-    <Box className="login-page">
+    <Box className={styles.signupPage}>
 
-      <Box className="login-form-box" >
-        <Stack className='formStack' gap={1}>
+      <Paper className={styles.signupFormBox} >
+        <Stack className={styles.formStack} gap={1}>
           <Typography
             align="left"
             sx={{
@@ -91,10 +96,9 @@ const handleRole = (e) => {
           </Typography>
 
           <FormControl fullWidth sx={{ marginBottom: '10px' }}>
-            <InputLabel id="demo-simple-select-label">Role</InputLabel>
+            <InputLabel >Role</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              
               value={inputs.role}
               label="Role"
               required
@@ -142,7 +146,7 @@ const handleRole = (e) => {
             onChange={(e) => { handleEmail(e) }}
           />
           <Typography style={{ color: "red" }}>{emailErrorMsg}</Typography>
-          <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+          <FormControl sx={{ mt: 1, width: '100%' }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
@@ -185,60 +189,7 @@ const handleRole = (e) => {
             }
             label="Password"
           />
-        </FormControl>
-          {/* <FormControl sx={{ width: "100%", display: 'flex', alignItems: 'center' }} variant="standard">
-
-            <InputLabel sx={{ padding: '10px 15px' }} htmlFor="standard-adornment-password">
-              Password
-            </InputLabel>
-            <InputBase
-              id="standard-adornment-password"
-              inputProps={{
-                style: {
-
-
-                  borderWidth: "1px",
-
-                  padding: "14px 16px 14px 16px",
-                },
-              }}
-              sx={{
-                width: "100%",
-                marginTop: '10px',
-                paddingRight: "0",
-                border: '1px solid #dadada',
-                borderRadius: '4px',
-                height: '58px'
-              }}
-              value={inputs.password}
-              disableUnderline={true}
-              required
-              onChange={(e) => {
-                handlePassword(e)
-                validate(e.target.value)
-              }}
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-
-                <InputAdornment position="end">
-                  <Button
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    sx={{
-                      textTransform: "none",
-                      fontSize: "16px",
-                      fontWeight: 500,
-
-                      "&:hover": { background: "none", border: "none" },
-                    }}
-                  >
-                    {showPassword ? "Hide" : "Show"}
-                  </Button>
-                </InputAdornment>
-              }
-            />
-            <Typography paragraph='true'>
+          <Typography paragraph='true'>
               {errorMessage === "" ? null : (
                 <span
                   style={{
@@ -250,29 +201,14 @@ const handleRole = (e) => {
                 </span>
               )}
             </Typography>
-          </FormControl> */}
+        </FormControl>
 
 
               <Typography>Already have an account <span style={{color: "#0b66c2", fontWeight: '600', cursor: 'pointer'}} onClick={() => navigate('/login')}>Login?</span></Typography>
 
           <Button
             variant="contained"
-            style={{
-              textTransform: "capitalize",
-              width: "100%",
-              boxShadow: "none",
-              height: "min-content",
-              minHeight: "48px",
-              borderRadius: "28px",
-              padding: "10px 24px 10px 24px",
-              textAlign: "center",
-              fontSize: "16px",
-              fontWeight: 500,
-              marginTop: "20px",
-              fontFamily:
-                '-apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif',
-              backgroundColor: "#0a66c2",
-            }}
+            className={styles.signupBtn}
             type="submit"
             onClick={(e) => handleSubmit(e)}
           >
@@ -280,7 +216,12 @@ const handleRole = (e) => {
           </Button>
         </Stack>
 
-      </Box>
+      </Paper>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        message="SignedUp Successfully"
+      />
     </Box>
   )
 }

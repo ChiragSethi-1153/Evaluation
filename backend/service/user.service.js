@@ -14,7 +14,7 @@ exports.getUsers = async (req) => {
         if(page > pages){
             return 404
         }
-        const users = await Users.find().skip(skip).limit(pageSize)
+        const users = await Users.find({}, '-password').skip(skip).limit(pageSize)
         console.log(users)
 
         return users

@@ -20,6 +20,7 @@ exports.verifyToken = async (req, res, next) => {
             else {
                 // console.log(user.id);
                 req.id = user.id
+                req.role = user.role
                 next();
             }
         });

@@ -1,0 +1,22 @@
+.testDetails {
+    width: calc(100vw - 300px);
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    
+}
+
+.questions {
+    background-color: #eaf1f7;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 8px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+

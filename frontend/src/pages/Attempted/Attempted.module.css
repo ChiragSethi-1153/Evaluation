@@ -1,0 +1,9 @@
+.allTests {
+    width: calc(100vw - 300px);
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    
+}

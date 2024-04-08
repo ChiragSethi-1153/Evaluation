@@ -1,12 +1,12 @@
 const bcrypt = require("bcryptjs");
-const { Users } = require("../model");
 const jwt = require("jsonwebtoken");
+const Users = require("../model/users");
 const key = process.env.JWT_KEY;
 
 exports.signup = async (req) => {
   try {
     console.log(req.body);
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     const existingUser = await Users.findOne({ email: email });
 
@@ -37,6 +37,7 @@ exports.signup = async (req) => {
         name,
         email,
         password: hashedPassword,
+        role
       });
 
       await user.save();
@@ -67,13 +68,14 @@ exports.login = async (req, res) => {
     if (!isPasswordCorrect) {
       return 400;
     }
-    const token = jwt.sign({ id: existingUser._id }, key, {
+    const token = jwt.sign({ id: existingUser._id, role: existingUser.role }, key, {
       expiresIn: "12hr",
     });
     console.log("Generated Token\n", token);
     const data = {
       name: existingUser?.name,
       email: existingUser?.email,
+      role: existingUser?.role
     };
     return { data, token };
   } catch (err) {

@@ -8,7 +8,7 @@ import TestDetails from '../../pages/TestDetails/TestDetails'
 const TestCard = ({items}) => {
 
   
-  const role = useSelector((state) => state?.auth?.content?.user?.role)
+  const role = localStorage.getItem('role')
 
   if(role === "admin"){
 

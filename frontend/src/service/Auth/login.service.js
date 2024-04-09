@@ -7,7 +7,8 @@ import axios from "axios"
     const response = await axios.post(`http://localhost:8080/auth/login`, inputs)
     console.log(response)
     const token = response?.data?.token
-    await localStorage.setItem('token', token)
+     localStorage.setItem('token', token)
+    localStorage.setItem('role', response?.data?.user?.role)
     return response
     }
 

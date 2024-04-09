@@ -55,7 +55,7 @@ exports.getAllQuestions = async (req) => {
 
         if(role === 'user'){
             
-            const allQuestions = await Questions.find({testId: testId}).skip(skip).limit(pageSize).populate()
+            const allQuestions = await Questions.find({testId: testId}, "-correctAnswer").skip(skip).limit(pageSize).populate()
             if(allQuestions.length > 0){
                 return alltests
             }
@@ -65,7 +65,7 @@ exports.getAllQuestions = async (req) => {
         }
 
         else if(role === 'admin'){
-            const questions = await Questions.find({testId: testId}).skip(skip).limit(pageSize)
+            const questions = await Questions.find({testId: testId}).sor({createdAt: -1}).skip(skip).limit(pageSize)
             if(questions.length > 0){
                 return questions
             }
